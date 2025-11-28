@@ -1,8 +1,9 @@
 package com.example.MyMart.Controller;
 
+import com.example.MyMart.DTO.Request.CustomerRequest;
+import com.example.MyMart.DTO.Response.CustomerResponse;
 import com.example.MyMart.Entity.Customer;
 import com.example.MyMart.Exception.CustomerNotFoundException;
-import com.example.MyMart.INPUT_Requests.CustomerRequest;
 import com.example.MyMart.Service.CustomerService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -18,18 +19,18 @@ public class CustomerController {
     CustomerService customerService;
 
     @PostMapping
-    public ResponseEntity addCustomer(@RequestBody Customer customer){
-       Customer savedCustomer =  customerService.addCustomer(customer);
-        return new ResponseEntity<>(savedCustomer, HttpStatus.CREATED);
+    public ResponseEntity addCustomer(@RequestBody CustomerRequest customerRequest){
+       CustomerResponse customerResponse =  customerService.addCustomer(customerRequest);
+        return new ResponseEntity<>(customerResponse, HttpStatus.CREATED);
     }
-    
+
 
 
     @GetMapping
     public ResponseEntity getCustomerById(@RequestParam("id") int id){
         try {
-            Customer customer = customerService.getCustomerById(id);
-            return  new ResponseEntity(customer,HttpStatus.FOUND);
+            CustomerResponse customerResponse  = customerService.getCustomerById(id);
+            return  new ResponseEntity(customerResponse,HttpStatus.FOUND);
         }catch (CustomerNotFoundException e){
             return new ResponseEntity(e.getMessage(),HttpStatus.BAD_REQUEST);
         }

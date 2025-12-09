@@ -18,7 +18,6 @@ import java.util.List;
 @Builder
 public class Customer {
 
-
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
@@ -36,23 +35,19 @@ public class Customer {
     private Gender gender ;
 
     @Column(length = 10)
-    private long mob_No;
+    private String mob_no;
 
     @CreationTimestamp
     Date CreatedAt;
 
-//    // Bidirectional relation with address-entity
-//    @OneToOne(mappedBy = "customer")
-//    Address address;
 
-//    //Bidirectional relation with review-entity
-//    @OneToMany(mappedBy = "customer")   //(1---M)
-//    List<Review> reviews = new ArrayList<>();  // bcz one customer have many reviews
-
-    @OneToMany  //---> for uni-directional 1-M
-    @JoinColumn(name = "customer_id")
+    @OneToMany
     @JsonIgnore
-    List<Review> reviews = new ArrayList<>();  // bcz one customer have many reviews
+    List<Review> reviews = new ArrayList<>();
+
+    @OneToMany(mappedBy = "customer")
+    @JsonIgnore
+    List<OrderEntity> orders = new ArrayList<>();
 
 
 }

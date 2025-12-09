@@ -4,11 +4,10 @@ import lombok.*;
 
 import java.util.Date;
 
-@Getter
-@Setter
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
+@Data
 public class CustomerResponse {
     private String name;
     private String Email;

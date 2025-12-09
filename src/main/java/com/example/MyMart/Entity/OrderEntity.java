@@ -18,7 +18,7 @@ import java.util.List;
 public class OrderEntity {
 
     @Id
-    @Column
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
 
     @Enumerated(value = EnumType.STRING)
@@ -27,8 +27,11 @@ public class OrderEntity {
     @Column
     private  long order_Value;
 
-
     @ManyToMany
     @JoinTable
     List<Product> products = new ArrayList<>();
+
+    @ManyToOne
+    @JoinColumn(name = "customer_id")
+    Customer customer;
 }

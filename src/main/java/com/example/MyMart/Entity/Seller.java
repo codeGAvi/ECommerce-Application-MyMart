@@ -1,13 +1,7 @@
 package com.example.MyMart.Entity;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
-import jakarta.persistence.OneToMany;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import jakarta.persistence.*;
+import lombok.*;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -17,9 +11,11 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
+@Builder
 public class Seller {
 
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
 
     @Column
@@ -31,10 +27,10 @@ public class Seller {
     @Column
     private String email;
 
-    @Column(length = 10, unique = true)
-    private String Gst_No;
+    @Column(length = 10,unique = true)
+    private int gst_no;
 
     // make bidirectional relation with product
-    @OneToMany(mappedBy = "seller")
+    @OneToMany(mappedBy = "seller", cascade = CascadeType.ALL)
     List<Product> products = new ArrayList<>();
 }

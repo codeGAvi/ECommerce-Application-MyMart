@@ -1,19 +1,18 @@
 package com.example.MyMart.Entity;
 
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 @Getter
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
-@Table(name ="address_details")  // in database column name for this table will be ""address_details" / instead of address
+//@Table(name ="address_details")  // in database column name for this table will be ""address_details" / instead of address
+@Builder
 public class Address {
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
 
     @Column
@@ -28,7 +27,7 @@ public class Address {
     @Column(unique = true)  // to male this column with unique values
     private long pincode;
 
-    // making entity- relationship ........  here unidirectrional relation with 1 to 1
+    // making entity- relationship ........  here unidirect  rional relation with 1 to 1
     @OneToOne
     @JoinColumn(name = "customer_id")     // foreign-key
     Customer customer;

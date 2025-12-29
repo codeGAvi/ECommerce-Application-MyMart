@@ -41,7 +41,7 @@ public class Customer {
     Date CreatedAt;
 
 
-    @OneToMany
+    @OneToMany(mappedBy = "customer")
     @JsonIgnore
     List<Review> reviews = new ArrayList<>();
 

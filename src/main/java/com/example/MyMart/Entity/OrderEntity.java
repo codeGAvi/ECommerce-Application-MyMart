@@ -25,7 +25,7 @@ public class OrderEntity {
     private Status status;
 
     @Column
-    private  long order_Value;
+    private  int order_Value;
 
     @ManyToMany
     @JoinTable

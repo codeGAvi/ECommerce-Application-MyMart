@@ -6,5 +6,6 @@ public enum Status {
     CANCELED,
     REJECTED,
     PACKED,
-    IN_TRANSIT
+    IN_TRANSIT,
+    PLACED
 }

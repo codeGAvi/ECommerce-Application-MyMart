@@ -10,6 +10,7 @@ import lombok.*;
 @Builder
 public class ProductRequest {
     private  String name;
-    private double price;
+    private int price;
     private Category category;
+
 }

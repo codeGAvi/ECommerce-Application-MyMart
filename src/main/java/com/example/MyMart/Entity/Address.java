@@ -28,7 +28,7 @@ public class Address {
     private long pincode;
 
     // making entity- relationship ........  here unidirect  rional relation with 1 to 1
-    @OneToOne
+    @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "customer_id")     // foreign-key
     Customer customer;
 }

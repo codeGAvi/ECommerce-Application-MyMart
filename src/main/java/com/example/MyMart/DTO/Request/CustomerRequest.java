@@ -2,15 +2,13 @@ package com.example.MyMart.DTO.Request;
 
 import com.example.MyMart.ENUM.Gender;
 import jakarta.persistence.Column;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 @Getter
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
+@Builder
 public class CustomerRequest {
     private String name;
     private int age;

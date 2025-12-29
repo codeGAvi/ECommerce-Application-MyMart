@@ -27,7 +27,7 @@ import java.util.Optional;
 public class CustomerServiceTests {
 
     @Mock
-   private CustomerRepository customerRepository;
+    private CustomerRepository customerRepository;
 
     @InjectMocks
     private CustomerService customerService;
@@ -48,7 +48,7 @@ public class CustomerServiceTests {
                 .CreatedAt(new Date(2017,04,12))
                 .build();
 
-        // and mock the function (getCustomerById) bcz , this belongs to another layer(repository)
+        // and mock the function (customerRepo.findById) bcz , this belongs to another layer(repository)
         Mockito.when(customerRepository.findById(Mockito.any())).thenReturn(Optional.of(customer));
 
         // Act ..... actually testing the function getCustomerById

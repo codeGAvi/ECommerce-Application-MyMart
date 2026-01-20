@@ -9,6 +9,7 @@ import org.hibernate.annotations.CreationTimestamp;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Set;
 
 @Getter
 @Setter
@@ -40,6 +41,14 @@ public class Customer {
     @CreationTimestamp
     Date CreatedAt;
 
+    @Column
+    private String username;
+
+    @Column
+    private String password;
+
+    @Column
+    private String roles;
 
     @OneToMany(mappedBy = "customer")
     @JsonIgnore

@@ -28,8 +28,8 @@ public class CustomerController {
     }
 
 
-    @GetMapping
-    public ResponseEntity getCustomerById(@RequestParam("id") int id){
+    @GetMapping("/id/{id}")
+    public ResponseEntity getCustomerById(@PathVariable int id){
         try {
             CustomerResponse customerResponse  = customerService.getCustomerById(id);
             return  new ResponseEntity(customerResponse,HttpStatus.FOUND);

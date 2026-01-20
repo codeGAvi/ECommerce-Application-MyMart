@@ -23,6 +23,7 @@ public class CustomerTransformer {
                 .name(customer.getName())
                 .Email(customer.getEmail())
                 .createdAt(customer.getCreatedAt())
+                .username(customer.getUsername())
                 .build();
     }
 
@@ -42,6 +43,8 @@ public class CustomerTransformer {
                 .email(customerRequest.getEmail())
                 .gender(customerRequest.getGender())
                 .mob_no(customerRequest.getMob_no())
+                .username(customerRequest.getUsername())
+                .password(customerRequest.getPassword())
                 .build();
     }
 }

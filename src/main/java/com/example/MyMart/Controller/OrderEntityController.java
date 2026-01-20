@@ -2,6 +2,7 @@ package com.example.MyMart.Controller;
 
 import com.example.MyMart.DTO.Request.ListOfOrder;
 import com.example.MyMart.DTO.Response.OrderEntityResponse;
+import com.example.MyMart.ENUM.Status;
 import com.example.MyMart.Service.OrderEntityService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -23,6 +24,17 @@ public class OrderEntityController {
         }
         catch(Exception e) {
             return new ResponseEntity<>(e.getMessage(), HttpStatus.ACCEPTED);
+        }
+    }
+
+    @PutMapping
+    public ResponseEntity UpdateOrderStatus(@RequestParam("order_Id") int orderId,
+                                            @RequestParam("status")Status newStatus){
+        try{
+            OrderEntityResponse orderEntityResponse = orderEntityService.UpdateOrderStatus(orderId,newStatus);
+            return new ResponseEntity<>(orderEntityResponse,HttpStatus.ACCEPTED);
+        } catch (Exception e) {
+            return new ResponseEntity<>(e.getMessage(),HttpStatus.BAD_REQUEST);
         }
     }
 }

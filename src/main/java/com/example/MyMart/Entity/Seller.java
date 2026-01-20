@@ -30,7 +30,18 @@ public class Seller {
     @Column(length = 10,unique = true)
     private int gst_no;
 
+    @Column
+    private String username;
+
+    @Column
+    private String password;
+
+    @Column
+    private String roles;
+
     // make bidirectional relation with product
     @OneToMany(mappedBy = "seller", cascade = CascadeType.ALL)
     List<Product> products = new ArrayList<>();
+
+
 }

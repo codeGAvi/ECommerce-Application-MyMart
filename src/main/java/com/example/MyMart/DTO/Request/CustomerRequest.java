@@ -18,4 +18,6 @@ public class CustomerRequest {
     private String mob_no;
 
     private String Email;
+    private String username;
+    private String password;
 }

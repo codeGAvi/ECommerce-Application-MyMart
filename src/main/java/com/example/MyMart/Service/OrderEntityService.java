@@ -8,6 +8,7 @@ import com.example.MyMart.Entity.Customer;
 import com.example.MyMart.Entity.OrderEntity;
 import com.example.MyMart.Entity.Product;
 import com.example.MyMart.Exception.CustomerNotFoundException;
+import com.example.MyMart.Exception.OrderNotFoundException;
 import com.example.MyMart.Exception.ProductNotFoundException;
 import com.example.MyMart.Repository.CustomerRepository;
 import com.example.MyMart.Repository.OrderEntityRepository;
@@ -96,4 +97,19 @@ public class OrderEntityService {
         }
     }
 
+    // for change/update the status of order
+    public OrderEntityResponse UpdateOrderStatus(int orderId, Status newStatus) {
+       Optional<OrderEntity> orderEntityOptional = orderEntityRepository.findById(orderId);
+       if(orderEntityOptional.isEmpty()){
+           throw new OrderNotFoundException("order with id: " + orderId + " not found");
+       }
+       OrderEntity orderEntity = orderEntityOptional.get();
+       orderEntity.setStatus(newStatus);
+       orderEntityRepository.save(orderEntity);
+       return OrderEntityResponse.builder()
+               .id(orderEntity.getId())
+               .status(orderEntity.getStatus())
+               .Order_value(orderEntity.getOrder_Value())
+               .build();
+    }
 }

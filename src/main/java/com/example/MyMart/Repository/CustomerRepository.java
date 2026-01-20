@@ -17,4 +17,5 @@ public interface CustomerRepository extends JpaRepository<Customer,Integer> {
     // filter based on age
     List<Customer>findByAgeLessThanEqual(int age);
 
+    Customer findByUsername(String username);
 }

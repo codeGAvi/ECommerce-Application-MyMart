@@ -8,26 +8,32 @@ import com.example.MyMart.Exception.CustomerNotFoundException;
 import com.example.MyMart.Repository.CustomerRepository;
 import com.example.MyMart.Transformer.CustomerTransformer;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 
 @Service
 public class CustomerService {
 
     @Autowired
     CustomerRepository customerRepository;
+    PasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
 
     public CustomerResponse addCustomer(CustomerRequest customerRequest){
 
         // Request_DTO to Entity
         Customer customer=   CustomerTransformer.customerRequestToCustomer(customerRequest);
-        // save entitiy in database
+        customer.setRoles("USER");  // Can have multiple roles
+        customer.setPassword(passwordEncoder.encode(customer.getPassword()));
         Customer savedCustomer = customerRepository.save(customer);
+
         //Entity to DTO_Response
-        CustomerResponse response = CustomerTransformer.customerToCustomerResponse(customer);
+        CustomerResponse response = CustomerTransformer.customerToCustomerResponse(savedCustomer);
         return  response;
     }
 
@@ -84,4 +90,30 @@ public class CustomerService {
         return  customerResponses;
     }
 
+//    public void promoteToSeller(int c_id) {
+//        Customer customer = customerRepository.findById(c_id).orElseThrow(()-> new CustomerNotFoundException("invalid customer id."));
+//        // now set the role
+//        customer.setRoles(Set.of(Roles.USER,Roles.SELLER));
+//        customerRepository.save(customer);
+  //  }
+
+//    public void promoteToAdmin(int c_id) {
+//        Customer customer = customerRepository.findById(c_id).orElseThrow(()-> new CustomerNotFoundException("invalid customer id"));
+//        customer.setRoles(Set.of(Roles.USER,Roles.SELLER,Roles.ADMIN));
+//        customerRepository.save(customer);
+//    }
+//
+//    public String createinitialAdmin(String username) {
+//       Customer customer =  customerRepository.findByUsername(username);
+//       if(customer==null){
+//           throw  new CustomerNotFoundException("invalid username");
+//       }
+//       if(customer.getRoles().contains(Roles.ADMIN)){
+//           return "User is already Admin";
+//       }
+//       // else gave role of "Admin" to this user
+//        customer.getRoles().add(Roles.ADMIN);
+//       customerRepository.save(customer);
+//       return "Initial Admin created successfully";
+//    }
 }

@@ -15,6 +15,8 @@ public class SellerTransformer {
                 .email(sellerRequest.getEmail())
                 .gst_no(sellerRequest.getGst_no())
                 .city(sellerRequest.getCity())
+                .username(sellerRequest.getUsername())
+                .password(sellerRequest.getPassword())
                 .products(new ArrayList<>())  // to avoid null pointer exception
                 .build();
     }

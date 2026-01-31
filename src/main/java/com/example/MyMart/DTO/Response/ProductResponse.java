@@ -12,6 +12,7 @@ public class ProductResponse {
     private  String name;
     private double price;
     private Category category;
+    private long stock;
     private SellerResponse seller;  // instead of returning entire seller entity just returning sellerResponse
 
 

@@ -15,6 +15,7 @@ public class ProductTransformer {
                 .name(productRequest.getName())
                 .price(productRequest.getPrice())
                 .category(productRequest.getCategory())
+                .stock(productRequest.getStock())
                 .reviews(new ArrayList<>())
                 .orders(new ArrayList<>())
                 .build();
@@ -25,6 +26,7 @@ public class ProductTransformer {
                 .name(product.getName())
                 .price(product.getPrice())
                 .category(product.getCategory())
+                .stock(product.getStock())
                 .seller(SellerTransformer.sellerToSellerResponse(product.getSeller()))
 
                 // used in get reviews

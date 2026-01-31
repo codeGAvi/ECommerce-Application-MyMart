@@ -26,6 +26,9 @@ public class Product {
     @Column
     private double price;
 
+    @Column
+    private long stock;
+
     @Enumerated(value = EnumType.STRING)
     private Category category;
 

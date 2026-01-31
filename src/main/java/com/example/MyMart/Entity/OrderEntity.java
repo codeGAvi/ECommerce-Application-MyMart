@@ -22,6 +22,7 @@ public class OrderEntity {
     private int id;
 
     @Enumerated(value = EnumType.STRING)
+    @Column(length = 20)
     private Status status;
 
     @Column

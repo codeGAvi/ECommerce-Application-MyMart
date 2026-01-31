@@ -18,4 +18,21 @@ so we’ve to Mock them. While @SpringBootTest does it automatically
 // Implement filter : user can filter the product by category, price etc.
 
 // Implemented dynamic price range filtering using Spring data JPA's derived queries, combined with pageable, 
-  wehere user can select the prince and then filter the product
+  where user can select the price and then filter the product
+
+
+// Transactional flow
+🎯 Goal of Transactional Flow
+
+Order place karte waqt ye sab ek hi unit me ho:
+
+1️⃣ Product fetch
+2️⃣ Stock check
+3️⃣ Stock reduce  // stock validation
+4️⃣ Order save
+5️⃣ OrderItems save
+6️⃣ Total amount calculate
+7️⃣ (Fail ho to rollback everything)
+##.
+“I implemented multi-item order placement using @Transactional 
+to ensure atomic stock updates and order persistence with rollback on failure.”

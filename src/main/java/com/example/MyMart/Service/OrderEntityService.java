@@ -4,6 +4,7 @@ import com.example.MyMart.DTO.Request.ListOfOrder;
 import com.example.MyMart.DTO.Request.orderItemsRequest;
 import com.example.MyMart.DTO.Response.OrderEntityResponse;
 import com.example.MyMart.ENUM.Status;
+import com.example.MyMart.EmailService;
 import com.example.MyMart.Entity.Customer;
 import com.example.MyMart.Entity.OrderEntity;
 import com.example.MyMart.Entity.Product;
@@ -17,6 +18,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Optional;
@@ -27,20 +29,16 @@ public class OrderEntityService {
     private final OrderEntityRepository orderEntityRepository;
     private final ProductRepository productRepository;
     private final CustomerRepository customerRepository;
-    private final JavaMailSender javaMailSender;
+    private final EmailService emailService;
 
+    @Transactional
     public OrderEntityResponse placeOrder(int cus_id, ListOfOrder listOfOrder){
         // check customer & product availability
         Optional<Customer> optionalCustomer = customerRepository.findById(cus_id);
         if(optionalCustomer.isEmpty()){
             throw new CustomerNotFoundException("invalid customer_id" + cus_id);
         }
-//      Optional<Product> optionalProduct =  productRepository.findById(p_id);
-//      if(optionalProduct.isEmpty()){
-//          throw new ProductNotFoundException("this product is not available" + p_id);
-//      }
 
-//      Product products = optionalProduct.get();
 
       Customer customers = optionalCustomer.get();
 
@@ -54,11 +52,19 @@ public class OrderEntityService {
 
             Optional<Product> optionalProduct =  productRepository.findById(p_id);
             if(optionalProduct.isEmpty()){
-                throw new ProductNotFoundException("this product is not available" + p_id);
-
+                throw new ProductNotFoundException("Product not found:" + p_id);
            }
             Product products = optionalProduct.get();
+
+            // checking stock
+            if(products.getStock()<qty){
+                throw new RuntimeException("Insufficiant stock for: " + products.getName());
+            }
+            // now reduce stock
+            products.setStock(products.getStock()-qty);
+            productRepository.save(products);  // saved in db
             total_order_value += products.getPrice()*qty;
+
             orderEntity.getProducts().add(products);
 
         }
@@ -71,8 +77,7 @@ public class OrderEntityService {
       // now save orderEntity in DB
         OrderEntity savedOrder = orderEntityRepository.save(orderEntity);
 
-        // send email for order place
-        sendEmail(savedOrder);
+   emailService.sendEmail(savedOrder); // call EmailService
 
       return OrderEntityResponse.builder()
               .id(savedOrder.getId())
@@ -82,20 +87,7 @@ public class OrderEntityService {
 
     }
 
-    public void sendEmail(OrderEntity savedOrder){
-        try {
-            SimpleMailMessage message = new SimpleMailMessage();
-            String description = "Hi," + " " + savedOrder.getCustomer().getName() + " your order " +
-                    "has been placed successfully";
-            message.setTo(savedOrder.getCustomer().getEmail());
-            message.setSubject("Order Placed");
-            message.setText(description);
 
-            javaMailSender.send(message);
-        } catch (Exception e) {
-            System.out.println(" Order placed successfully but Email sending failed : " + e.getMessage());
-        }
-    }
 
     // for change/update the status of order
     public OrderEntityResponse UpdateOrderStatus(int orderId, Status newStatus) {

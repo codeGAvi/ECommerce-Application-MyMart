@@ -1,4 +1,4 @@
-# use this annotation to write Junit test for controller layer
+ # use this annotation to write Junit test for controller layer
 
 1. @AutoConfigureMockMvc annotation. This annotation creates an instance of MockMvc
 2. @WebMvcTest does not detect dependencies needed for the controller automatically, 
@@ -36,3 +36,15 @@ Order place karte waqt ye sab ek hi unit me ho:
 ##.
 “I implemented multi-item order placement using @Transactional 
 to ensure atomic stock updates and order persistence with rollback on failure.”
+
+ 
+// ASYNC EMAIL NOTIFICATION
+Integrated asynchronous email notifications to send order confirmations without blocking API responses, 
+improving user experience and performance
+
+
+
+//DOCKERIZATION 
+--> Docker helps package my Spring Boot application along with its runtime environment into a container, so it runs consistently across different systems.
+In my project, I containerized the backend to simplify deployment and avoid environment-specific issues.
+This makes the application portable, easier to deploy, and production-ready.

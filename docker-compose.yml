@@ -1,0 +1,34 @@
+# Created docker-compose.yml file for --> run and connect multiple containers together (MyMart app + MySQL)
+
+# DOCKER CONTAINER
+
+version: "3.9"
+
+services:
+  mysql:
+    image: mysql:8
+    container_name: mymart-mysql
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: MyMart
+    ports:
+      - "3307:3306"
+    volumes:
+      - mysql_data:/var/lib/mysql
+
+  mymart-app:
+    build: .
+    container_name: mymart-app
+    restart: always
+    ports:
+      - "9999:9999"
+    depends_on:
+      - mysql
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:mysql://mysql:3306/MyMart
+      SPRING_DATASOURCE_USERNAME: root
+      SPRING_DATASOURCE_PASSWORD: root
+
+volumes:
+  mysql_data:

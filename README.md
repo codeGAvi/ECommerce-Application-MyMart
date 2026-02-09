@@ -1,38 +1,59 @@
-# use this annotation to write Junit test for controller layer
+1. Project Overview
+- Short intro: MyMart — a Spring Boot backend with MySQL, Dockerized for portability and deployment.
 
-1. @AutoConfigureMockMvc annotation. This annotation creates an instance of MockMvc
-2. @WebMvcTest does not detect dependencies needed for the controller automatically, 
-so we’ve to Mock them. While @SpringBootTest does it automatically
+2. Testing Notes
+- Controller Layer Testing
+- @AutoConfigureMockMvc → creates MockMvc instance.
+- @WebMvcTest → detects only controller, mocks dependencies manually.
+- @SpringBootTest → loads full context, auto-detects dependencies.
 
+3. Features Implemented
+- Pagination (15/01/2026)
+- Used Pageable request object.
+- Mapped Page object to product response.
+- Calculated total pages = ceil(totalElements / pageSize).
+- Sorting (18/01/2026)
+- Used Sort.by (like SQL ORDER BY).
+- Supported ascending/descending on product columns.
+- Filtering
+- Filter by category, price, etc.
+- Dynamic price range filtering with Spring Data JPA + pageable.
+- Transactional Flow
+- Multi-item order placement with @Transactional.
+- Steps: product fetch → stock check → stock reduce → order save → order items save → total amount → rollback on failure.
+- Async Email Notification
+- Integrated async email confirmations to improve UX and performance.
 
-// date 15/01/2026 
-# add Pageable / Pagination in product : this is a request object , it says that which page and how many pages should come in page
-..> use map: for mapping the Page object with Product response 
-..>  calculate total pages required for hold the elemnts = ceil(totalElementsinDB/currentSize)
+4. Dockerization
+- Why: Package app + runtime → consistent across systems, portable, production-ready.
+- Steps:
+- Created Dockerfile (must be named exactly Dockerfile).
+- Built JAR with .\mvnw clean package.
+- Built image with docker build -t mymart-app ..
+- Created docker-compose.yml for MyMart app + MySQL.
 
-// date 18/01/2026
-# Implement Sorting with Pagination 
-  ... user Sort object , used Sort.by(same as ORDER BY in DB)
-  .... sort based on all column of product with ascending as well as on descending 
-  
-// Implement filter : user can filter the product by category, price etc.
+5. Command Cheat Sheet
+# Maven
+.\mvnw package                  : build JAR file (runs tests by default)
+.\mvnw package -DskipTests      : build JAR file without running tests
+.\mvnw clean package            : delete old build files and build new JAR
+.\mvnw test                     : run all tests
+.\mvnw test -Dtest=ClassName    : run specific test class
 
-// Implemented dynamic price range filtering using Spring data JPA's derived queries, combined with pageable, 
-  where user can select the price and then filter the product
+# Docker
+docker build -t mymart-app .    : build Docker image from Dockerfile
+docker run -p 8080:8080 mymart-app : run container mapping port 8080 (initially used)
+docker run -p 9999:9999 mymart-app : run container mapping port 9999 (Spring Boot app port)
+docker images                   : list all built images
+docker ps                       : list running containers
+docker stop <container_id>      : stop a running container
+docker info                     : show Docker system info
+docker version                  : show Docker client/server version
 
+# Docker Compose
+docker-compose up               : start all services defined in docker-compose.yml
+docker-compose up --build       : rebuild images and start services
+docker-compose down             : stop and remove containers, networks, volumes
 
-// Transactional flow
-🎯 Goal of Transactional Flow
-
-Order place karte waqt ye sab ek hi unit me ho:
-
-1️⃣ Product fetch
-2️⃣ Stock check
-3️⃣ Stock reduce  // stock validation
-4️⃣ Order save
-5️⃣ OrderItems save
-6️⃣ Total amount calculate
-7️⃣ (Fail ho to rollback everything)
-##.
-“I implemented multi-item order placement using @Transactional 
-to ensure atomic stock updates and order persistence with rollback on failure.”
+# MySQL Access
+mysql -h 127.0.0.1 -P 3307 -u root -p : connect to MySQL running in Docker (host port 3307)

@@ -36,7 +36,7 @@ public class Product {
     // make bidirectional relation with seller
     @ManyToOne
     @JoinColumn(name = "seller_id")
-    Seller seller;
+    private Seller seller;
 
     @OneToMany(mappedBy = "product")
     @JsonIgnore

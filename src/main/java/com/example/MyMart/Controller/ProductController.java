@@ -24,14 +24,10 @@ public class ProductController  {
     @Autowired
     ProductService productService;
 
-    @PostMapping
-    public ResponseEntity addProduct(@RequestParam("seller_id") int seller_id,@RequestBody ProductRequest productRequest){
-        try {
-            ProductResponse productResponse = productService.addProduct(seller_id,productRequest);
-            return new ResponseEntity<>(productResponse, HttpStatus.CREATED);
-        } catch (Exception e) {
-            return new ResponseEntity<>(e.getMessage(),HttpStatus.BAD_REQUEST);
-        }
+    @PostMapping("/username/{username}")
+    public ResponseEntity addProduct( @PathVariable String username, @RequestBody ProductRequest productRequest){
+       ProductResponse productResponse = productService.addProduct( username, productRequest);
+       return new ResponseEntity<>(productResponse, HttpStatus.CREATED);
     }
 
     // get product by category

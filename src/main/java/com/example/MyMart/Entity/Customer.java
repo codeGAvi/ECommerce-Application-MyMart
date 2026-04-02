@@ -1,15 +1,13 @@
 package com.example.MyMart.Entity;
 
 import com.example.MyMart.ENUM.Gender;
+import com.example.MyMart.ENUM.Roles;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
 
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 @Getter
 @Setter
@@ -48,7 +46,9 @@ public class Customer {
     private String password;
 
     @Column
-    private String roles;
+    @ElementCollection(fetch = FetchType.EAGER)
+    @Enumerated(value = EnumType.STRING)
+    private Set<Roles> roles = new HashSet<>();
 
     @OneToMany(mappedBy = "customer")
     @JsonIgnore

@@ -30,11 +30,11 @@ public class Seller {
     @Column(length = 10,unique = true)
     private int gst_no;
 
-    @Column
-    private String username;
+    // link with customer
+     @OneToOne
+     @JoinColumn(name = "customer_id")
+     private Customer customer;
 
-    @Column
-    private String password;
 
     @Column
     private String roles;

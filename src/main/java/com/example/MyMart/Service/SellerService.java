@@ -19,10 +19,7 @@ public class SellerService {
     PasswordEncoder passwordEncoder;
 
     public SellerResponse addSeller(SellerRequest sellerRequest) {
-
         Seller seller = SellerTransformer.sellerRequestToSeller(sellerRequest);
-        seller.setRoles("SELLER");
-        seller.setPassword(passwordEncoder.encode(seller.getPassword()));
         Seller savedSeller = sellerRepository.save(seller);
        return SellerTransformer.sellerToSellerResponse(savedSeller);
     }

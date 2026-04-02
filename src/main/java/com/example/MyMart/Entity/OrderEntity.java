@@ -15,6 +15,7 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
+@Table(name = "Place_Order")
 public class OrderEntity {
 
     @Id
@@ -29,7 +30,6 @@ public class OrderEntity {
     private  int order_Value;
 
     @ManyToMany
-    @JoinTable
     List<Product> products = new ArrayList<>();
 
     @ManyToOne

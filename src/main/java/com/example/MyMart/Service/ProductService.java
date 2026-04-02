@@ -3,9 +3,11 @@ package com.example.MyMart.Service;
 import com.example.MyMart.DTO.Request.ProductRequest;
 import com.example.MyMart.DTO.Response.ProductResponse;
 import com.example.MyMart.ENUM.Category;
+import com.example.MyMart.Entity.Customer;
 import com.example.MyMart.Entity.Product;
 import com.example.MyMart.Entity.Seller;
 import com.example.MyMart.Exception.SellerNotFoundException;
+import com.example.MyMart.Repository.CustomerRepository;
 import com.example.MyMart.Repository.ProductRepository;
 import com.example.MyMart.Repository.SellerRepository;
 import com.example.MyMart.Transformer.ProductTransformer;
@@ -14,6 +16,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -28,30 +31,38 @@ public class ProductService {
     @Autowired
     SellerRepository sellerRepository;
 
-    public ProductResponse addProduct(int seller_id,ProductRequest productRequest){
+    @Autowired
+    CustomerRepository customerRepository;
 
-        // get Seller with given seller_id
-        Optional<Seller> sellerOptional = sellerRepository.findById(seller_id);
-        if(sellerOptional.isEmpty()){
-           throw  new SellerNotFoundException("Invalid Seller id: ");
+    public ProductResponse addProduct(String username, ProductRequest productRequest){
+
+        // get logged-in customer
+        Customer customer = customerRepository.findByUsername(username);
+        if(customer == null){
+            throw new RuntimeException("Customer not found");
         }
-        // DTO to entity
+
+        //  get seller from customer
+        Seller seller = sellerRepository.findByCustomer(customer);
+        if(seller == null){
+            throw new SellerNotFoundException("Seller not found for this user");
+        }
+
+        //  DTO → entity
         Product product = ProductTransformer.productRequestToProduct(productRequest);
 
-        // else set this seller object into product entity
-        Seller seller = sellerOptional.get();
+        // set relation
+        product.setSeller(seller);
+        seller.getProducts().add(product);
 
-        // setting Bidirectional Relations b/w seller and products
-        seller.getProducts().add(product);  // add new product in the list of products
-        product.setSeller(seller); // add seller in product
+        //  save
+        Seller savedSeller = sellerRepository.save(seller);
 
-        // now save product and seller in database ,,,, saved products using cascade over product in seller entity
-       Seller savedSeller =  sellerRepository.save(seller);  // seller + product
         int size = savedSeller.getProducts().size();
-        Product savedProduct = savedSeller.getProducts().get(size-1); // get last product from product List
+        Product savedProduct = savedSeller.getProducts().get(size - 1);
+
         return ProductTransformer.ProductToProductResponse(savedProduct);
     }
-
 
     public List<ProductResponse> getProductByCategory(Category categoroy){
         List<Product> productByCategory = productRepository.findByCategory(categoroy);
@@ -84,4 +95,6 @@ public class ProductService {
         return productRepository.findByPriceBetween(minPrice,maxPrice,pageable)
                 .map(ProductTransformer::ProductToProductResponse);
     }
+
+
 }

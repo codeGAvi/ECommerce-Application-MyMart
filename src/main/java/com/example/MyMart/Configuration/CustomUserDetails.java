@@ -1,6 +1,7 @@
 package com.example.MyMart.Configuration;
 
 
+import com.example.MyMart.ENUM.Roles;
 import com.example.MyMart.Entity.Customer;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -16,15 +17,15 @@ public class CustomUserDetails implements UserDetails {
     String password;
     List<GrantedAuthority>grantedAuthorities; // this holds the list of roles;
 
-    CustomUserDetails(Customer customer){
+   public CustomUserDetails(Customer customer){
         this.username = customer.getUsername();
         this.password = customer.getPassword();
 
-       String[]roles = customer.getRoles().split(",");
         List<GrantedAuthority>grantedAuthorityList = new ArrayList<>();
-        for(String role:roles){
-            SimpleGrantedAuthority simpleGrantedAuthority = new SimpleGrantedAuthority("ROLE_"+ role);
-            grantedAuthorityList.add(simpleGrantedAuthority);
+
+        for(Roles role:customer.getRoles()){
+            grantedAuthorityList.add(new SimpleGrantedAuthority("ROLE_"+ role.name()));
+
         }
         this.grantedAuthorities = grantedAuthorityList;
     }

@@ -8,20 +8,24 @@
 - @SpringBootTest → loads full context, auto-detects dependencies.
 
 3. Features Implemented
-- Pagination (15/01/2026)
+- Pagination: 
 - Used Pageable request object.
 - Mapped Page object to product response.
 - Calculated total pages = ceil(totalElements / pageSize).
-- Sorting (18/01/2026)
+- 
+- Sorting: 
 - Used Sort.by (like SQL ORDER BY).
 - Supported ascending/descending on product columns.
-- Filtering
+
+- Filtering: 
 - Filter by category, price, etc.
 - Dynamic price range filtering with Spring Data JPA + pageable.
-- Transactional Flow
+
+- Transactional Flow: 
 - Multi-item order placement with @Transactional.
 - Steps: product fetch → stock check → stock reduce → order save → order items save → total amount → rollback on failure.
-- Async Email Notification
+
+- Async Email Notification:
 - Integrated async email confirmations to improve UX and performance.
 
 4. Dockerization
@@ -32,7 +36,10 @@
 - Built image with docker build -t mymart-app ..
 - Created docker-compose.yml for MyMart app + MySQL.
 
-5. Command Cheat Sheet
+5. Spring Security:
+- Implemented Role based security for the Authentication and Authorization.
+
+6. Command Cheat Sheet
 # Maven
 .\mvnw package                  : build JAR file (runs tests by default)
 .\mvnw package -DskipTests      : build JAR file without running tests

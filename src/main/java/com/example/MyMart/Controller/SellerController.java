@@ -20,6 +20,7 @@ public class SellerController {
 
     @PostMapping
     public ResponseEntity addSeller(@RequestBody SellerRequest sellerRequest){
+        System.out.println("Controller: Adding seller request received");
         SellerResponse sellerResponse = sellerService.addSeller(sellerRequest);
         return  new ResponseEntity<>(sellerResponse, HttpStatus.CREATED);
     }

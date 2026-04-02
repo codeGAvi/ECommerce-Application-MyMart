@@ -14,6 +14,4 @@ public class SellerRequest {
     private  int gst_no;
     private  String city;
     private  String email;
-    private String username;
-    private String password;
 }

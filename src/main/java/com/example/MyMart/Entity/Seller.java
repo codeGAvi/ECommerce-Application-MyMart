@@ -36,9 +36,6 @@ public class Seller {
      private Customer customer;
 
 
-    @Column
-    private String roles;
-
     // make bidirectional relation with product
     @OneToMany(mappedBy = "seller", cascade = CascadeType.ALL)
     List<Product> products = new ArrayList<>();

@@ -6,6 +6,8 @@ import com.example.MyMart.Entity.Customer;
 import lombok.Builder;
 import lombok.experimental.UtilityClass;
 
+import java.util.HashSet;
+
 
 @UtilityClass   // make all members static
 public class CustomerTransformer {
@@ -45,6 +47,7 @@ public class CustomerTransformer {
                 .mob_no(customerRequest.getMob_no())
                 .username(customerRequest.getUsername())
                 .password(customerRequest.getPassword())
+                .roles(new HashSet<>())
                 .build();
     }
 }

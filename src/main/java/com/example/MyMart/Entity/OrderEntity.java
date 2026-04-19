@@ -35,4 +35,5 @@ public class OrderEntity {
     @ManyToOne
     @JoinColumn(name = "customer_id")
     Customer customer;
+    
 }
